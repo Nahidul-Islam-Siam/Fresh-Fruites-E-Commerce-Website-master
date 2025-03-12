@@ -28,6 +28,13 @@ const authApi = baseApi.injectEndpoints({
       }),
     }),
 
+    getProducts: build.query({
+      query: () => ({
+        url: "api/v1/products",  
+        method: "GET",
+      }),
+    }),
+
 
 
   }),
@@ -37,6 +44,7 @@ export const {
   useSignupMutation,
   useLoginMutation, 
 useGetCategoriesQuery, 
+useGetProductsQuery,
 } = authApi;
 
 export default authApi;
