@@ -5,21 +5,21 @@ import { useGetCategoriesQuery } from "@/redux/api/auth/authApi";
 
 const ProductCard = ({ name, price, image }) => {
     return (
-      <div className="bg-white rounded-lg shadow overflow-hidden">
+      <div className="bg-white rounded-lg shadow overflow-hidden group transition-all duration-300 hover:shadow-lg">
         <div className="relative w-full h-48">
-          {/* Image component, make sure the image is inside the public folder */}
-          <Image src={`/assets/${image}`} alt={name} layout="fill" objectFit="cover" />
+          <Image src={`/assets/${image}`} alt={name} height={200} width={200} />
         </div>
         <div className="p-4 text-center">
-          <h3 className="text-lg font-semibold mb-2">{name}</h3>
+          <h3 className="text-lg text-[#212337] font-semibold mb-2">{name}</h3>
           <p className="text-gray-600 mb-4">{price}</p>
-          <button className="w-full py-2 bg-orange-500 text-white rounded hover:bg-orange-600 transition-all">
+          <button className="w-full py-2 bg-orange-500 text-white rounded transition-all transform group-hover:scale-105 group-hover:bg-orange-600 duration-300">
             Add to cart
           </button>
         </div>
       </div>
     );
-  };
+};
+
   
 
 const CategoryFilter = ({ selectedCategory, onSelectCategory }) => {
