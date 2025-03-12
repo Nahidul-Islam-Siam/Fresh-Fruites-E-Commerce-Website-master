@@ -7,7 +7,7 @@ const ProductCard = ({ name, price, image }) => {
   return (
     <div className="bg-white rounded-lg shadow overflow-hidden group transition-all duration-300 hover:shadow-lg">
       <div className="relative w-full h-48">
-        <Image src={`/assets/${image}`} alt={name} height={200} width={200} />
+        <Image src={image} alt={name} height={200} width={200} />
       </div>
       <div className="p-4 text-center">
         <h3 className="text-lg text-[#212337] font-semibold mb-2">{name}</h3>
@@ -23,7 +23,7 @@ const ProductCard = ({ name, price, image }) => {
 const CategoryFilter = ({ selectedCategory, onSelectCategory, categories }) => {
   return (
     <div className="flex justify-center gap-2 mb-6">
-      {["All", ...categories].map((category, index) => (
+      {categories.map((category, index) => (
         <button
           key={index}
           onClick={() => onSelectCategory(category)}
@@ -43,16 +43,17 @@ const ProductGrid = () => {
   const { data: productsData, error, isLoading } = useGetProductsQuery();
   const { data: categoriesData, isLoading: isLoadingCategories } = useGetCategoriesQuery();
 
+  console.log(productsData);
+  console.log(categoriesData);
+  
   if (isLoading || isLoadingCategories) return <p>Loading...</p>;
   if (error) return <p>Error fetching data!</p>;
-
 
   const categories = Array.isArray(categoriesData?.data) ? categoriesData.data : [];
   const products = Array.isArray(productsData?.data) ? productsData.data : [];  // Access the products from data.data
 
-
+ 
   const categoryNames = ["All", ...categories.map((category) => category.categoryName)];
-
 
   const filteredProducts =
     selectedCategory === "All"
@@ -65,7 +66,6 @@ const ProductGrid = () => {
   return (
     <div className="bg-white min-h-screen">
       <div className="container mx-auto py-8">
-   
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold mb-2">Our Fresh Products</h2>
           <p className="text-gray-600">
@@ -73,14 +73,12 @@ const ProductGrid = () => {
           </p>
         </div>
 
-
         <CategoryFilter
           selectedCategory={selectedCategory}
           onSelectCategory={setSelectedCategory}
-          categories={categoryNames}
+          categories={categoryNames}  // Pass the categories with "All" included
         />
 
-   
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
           {Array.isArray(filteredProducts) && filteredProducts.length > 0 ? (
             filteredProducts.map((product) => (
@@ -96,7 +94,6 @@ const ProductGrid = () => {
           )}
         </div>
 
-    
         <div className="flex justify-center mt-8">
           <button className="px-6 py-3 bg-orange-500 text-white rounded hover:bg-orange-600 transition-all">
             See All Products
