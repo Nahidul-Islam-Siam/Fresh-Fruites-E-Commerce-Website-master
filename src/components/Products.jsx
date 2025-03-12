@@ -1,6 +1,7 @@
 'use client'
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useGetCategoriesQuery, useGetProductsQuery } from "@/redux/api/auth/authApi";
 
 const ProductCard = ({ name, price, image }) => {
@@ -39,29 +40,48 @@ const CategoryFilter = ({ selectedCategory, onSelectCategory, categories }) => {
 
 const ProductGrid = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [displayedProducts, setDisplayedProducts] = useState([]);
+  const [isMobile, setIsMobile] = useState(false);
 
   const { data: productsData, error, isLoading } = useGetProductsQuery();
   const { data: categoriesData, isLoading: isLoadingCategories } = useGetCategoriesQuery();
 
-  console.log(productsData);
-  console.log(categoriesData);
-  
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768); 
+    };
+
+    handleResize(); 
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (productsData && categoriesData) {
+      const categories = Array.isArray(categoriesData?.data) ? categoriesData.data : [];
+      const products = Array.isArray(productsData?.data) ? productsData.data : [];
+
+      const filteredProducts =
+        selectedCategory === "All"
+          ? products
+          : products.filter((product) => {
+              const category = categories.find((cat) => cat.categoryName === selectedCategory);
+              return category && product.categoryId === category.id;
+            });
+
+      const sliceCount = isMobile ? 4 : 8;
+      setDisplayedProducts(filteredProducts.slice(0, sliceCount));
+    }
+  }, [productsData, categoriesData, selectedCategory, isMobile]);
+
   if (isLoading || isLoadingCategories) return <p>Loading...</p>;
   if (error) return <p>Error fetching data!</p>;
 
   const categories = Array.isArray(categoriesData?.data) ? categoriesData.data : [];
-  const products = Array.isArray(productsData?.data) ? productsData.data : [];  // Access the products from data.data
-
- 
   const categoryNames = ["All", ...categories.map((category) => category.categoryName)];
-
-  const filteredProducts =
-    selectedCategory === "All"
-      ? products
-      : products.filter((product) => {
-          const category = categories.find((cat) => cat.categoryName === selectedCategory);
-          return category && product.categoryId === category.id;
-        });
 
   return (
     <div className="bg-white min-h-screen">
@@ -76,12 +96,12 @@ const ProductGrid = () => {
         <CategoryFilter
           selectedCategory={selectedCategory}
           onSelectCategory={setSelectedCategory}
-          categories={categoryNames}  // Pass the categories with "All" included
+          categories={categoryNames}
         />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-          {Array.isArray(filteredProducts) && filteredProducts.length > 0 ? (
-            filteredProducts.map((product) => (
+          {Array.isArray(displayedProducts) && displayedProducts.length > 0 ? (
+            displayedProducts.map((product) => (
               <ProductCard
                 key={product.id}
                 name={product.productName}
@@ -95,9 +115,11 @@ const ProductGrid = () => {
         </div>
 
         <div className="flex justify-center mt-8">
-          <button className="px-6 py-3 bg-orange-500 text-white rounded hover:bg-orange-600 transition-all">
-            See All Products
-          </button>
+          <Link href="/shop">
+            <button className="px-6 py-3 bg-orange-500 text-white rounded hover:bg-orange-600 transition-all">
+              See All Products
+            </button>
+          </Link>
         </div>
       </div>
     </div>
