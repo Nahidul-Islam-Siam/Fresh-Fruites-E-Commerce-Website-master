@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const baseApi = createApi({
     reducerPath: "baseApi",
     baseQuery: fetchBaseQuery({
-        baseUrl: "https://outlet-appointment-booking.onrender.com/v1",
+        baseUrl: "https://api-fresh-harvest.code-commando.com/",
         // credentials: "include",
         prepareHeaders: (headers) => {
             const token = localStorage.getItem("token");

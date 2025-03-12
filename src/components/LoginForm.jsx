@@ -1,10 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import SocialLogin from "./SocialLogin";
+import { useLoginMutation } from "@/redux/api/auth/authApi";
+import { toast } from "react-toastify"; 
 
 export function LoginForm() {
   const {
@@ -13,9 +16,28 @@ export function LoginForm() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = () => {
-    console.log("Login Data:", data);
-    alert("Login successful!");
+  const [login, { isLoading, error }] = useLoginMutation();
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const onSubmit = async (data) => {
+    const loginData = {
+      email: data.email,
+      password: data.password,
+    };
+
+    try {
+      const response = await login(loginData).unwrap();  
+      console.log("Login successful:", response);
+      toast.success("Login successful!");
+
+    } catch (err) {
+      console.error("Login failed:", err);
+      toast.error(err?.data?.message || "Login failed. Please try again.");
+    }
   };
 
   return (
@@ -44,13 +66,22 @@ export function LoginForm() {
         <Label htmlFor="password" className="text-[#212337] text-lg">
           Password
         </Label>
-        <Input
-          id="password"
-          type="password"
-          placeholder="Enter your password"
-          {...register("password", { required: "Password is required", minLength: 6 })}
-          className="border border-gray-300 p-2 rounded-md w-full text-[#212337] text-lg"
-        />
+        <div className="relative">
+          <Input
+            id="password"
+            type={showPassword ? "text" : "password"}
+            placeholder="Enter your password"
+            {...register("password", { required: "Password is required", minLength: 6 })}
+            className="border border-gray-300 p-2 rounded-md w-full text-[#212337] text-lg"
+          />
+          <button
+            type="button"
+            onClick={togglePasswordVisibility}
+            className="absolute right-3 top-2 text-gray-600"
+          >
+            {showPassword ? "🙈" : "👁️"}
+          </button>
+        </div>
         {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
       </div>
 
@@ -65,10 +96,13 @@ export function LoginForm() {
         <Button
           type="submit"
           className="w-full bg-[#FF6A1A] text-white py-2 rounded-md hover:bg-blue-700"
+          disabled={isLoading}
         >
-          Login
+          {isLoading ? "Logging in..." : "Login"}
         </Button>
       </div>
+
+      {error && <p className="text-red-500 text-sm">{error?.data?.message || "Login failed. Please try again."}</p>}
 
       <div className="mt-4 text-center text-gray-500">or continue with</div>
       <SocialLogin />

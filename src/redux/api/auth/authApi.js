@@ -1,4 +1,5 @@
-import baseApi from "../baseApi"; // Make sure this is imported correctly
+import baseApi from "../baseApi";
+
 
 const authApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -7,70 +8,35 @@ const authApi = baseApi.injectEndpoints({
         url: `api/v1/users/register`,
         method: "POST",
         body: userData,
-        credentials: "omit", // Assuming this is for CORS or some other reason
+        credentials: "omit",
       }),
     }),
 
-    // Uncomment and use these when you're ready to implement them
-    // login: build.mutation({
-    //     query: (credentials) => ({
-    //         url: "/auth/login",
-    //         method: "POST",
-    //         body: credentials,
-    //         credentials: "omit",
-    //     }),
-    // }),
+    login: build.mutation({
+        query: (credentials) => ({
+            url: "api/v1/auth/login",
+            method: "POST",
+            body: credentials,
+            credentials: "omit",
+        }),
+    }),
 
-    // verifyEmail: build.mutation({
-    //     query: (emailData) => ({
-    //         url: "/user/auth/verify-email",
-    //         method: "POST",
-    //         body: emailData,
-    //     }),
-    // }),
+    getCategories: build.query({
+      query: () => ({
+        url: "api/v1/category",  
+        method: "GET",
+      }),
+    }),
 
-    // resendVerificationCode: build.mutation({
-    //     query: (resendCodeData) => ({
-    //         url: "/user/auth/email-verification/resend-code",
-    //         method: "POST",
-    //         body: resendCodeData,
-    //     }),
-    // }),
 
-    // sendForgetOtp: build.mutation({
-    //     query: (email) => ({
-    //         url: `/user/forget-password`,
-    //         method: 'POST',
-    //         body: { email },
-    //     }),
-    // }),
 
-    // verifyForgotOtp: build.mutation({
-    //     query: ({ email, otp }) => ({
-    //         url: "/auth/verify-otp",
-    //         method: "POST",
-    //         body: { email, otp },
-    //     }),
-    // }),
-
-    // changePassword: build.mutation({
-    //     query: (data) => ({
-    //         url: "/auth/admin/change-password",
-    //         method: "POST",
-    //         body: data,
-    //     }),
-    // }),
   }),
 });
 
 export const {
-  useSignupMutation, // Exporting the hook for signup
-  useLoginMutation, // Exporting the login mutation hook (commented out for now)
-  useVerifyEmailMutation, // Exporting the email verification hook (commented out for now)
-  useSendForgetOtpMutation, // Exporting the forgot OTP hook (commented out for now)
-  useChangePasswordMutation, // Exporting change password hook (commented out for now)
-  useVerifyForgotOtpMutation, // Exporting verify forgot OTP hook (commented out for now)
-  useResendVerificationCodeMutation, // Exporting resend verification code hook (commented out for now)
+  useSignupMutation,
+  useLoginMutation, 
+useGetCategoriesQuery, 
 } = authApi;
 
 export default authApi;

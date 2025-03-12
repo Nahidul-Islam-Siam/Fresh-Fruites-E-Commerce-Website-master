@@ -1,6 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,34 +15,47 @@ export function SignUpForm() {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const [singup, { isLoading, error }] = useSignupMutation();
 
-  const [Signup, { isLoading, error }] = useSignupMutation();
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
   const onSubmit = async (data) => {
+    const formattedData = {
+      fullName: data.fullName,
+      email: data.email,
+      password: data.password,
+    };
+
     try {
-      await Signup(data).unwrap();
-      alert("Signup successful!");
+   
+      const res = await singup(formattedData).unwrap();
+      console.log("Registration successful!", res);
+      toast.success("User registered successfully");
     } catch (err) {
-      console.error("Signup failed:", err);
+      console.error("Registration failed:", err);
+      toast.error(err?.data?.message || "Signup failed. Please try again.");
     }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      {/* Full Name */}
       <div>
-        <Label htmlFor="name" className="text-[#212337] text-lg">
+        <Label htmlFor="fullName" className="text-[#212337] text-lg">
           Name
         </Label>
         <Input
-          id="name"
+          id="fullName"
           type="text"
           placeholder="Enter your name"
-          {...register("name", { required: "Name is required" })}
+          {...register("fullName", { required: "Name is required" })}
           className="border border-gray-300 p-2 rounded-md w-full text-[#212337] text-lg"
         />
-        {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
+        {errors.fullName && <p className="text-red-500 text-sm">{errors.fullName.message}</p>}
       </div>
 
+      {/* Email */}
       <div>
         <Label htmlFor="email" className="text-[#212337] text-lg">
           Email
@@ -61,20 +76,34 @@ export function SignUpForm() {
         {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
       </div>
 
+      {/* Password */}
       <div>
         <Label htmlFor="password" className="text-[#212337] text-lg">
           Password
         </Label>
-        <Input
-          id="password"
-          type="password"
-          placeholder="Enter your password"
-          {...register("password", { required: "Password is required", minLength: 6 })}
-          className="border border-gray-300 p-2 rounded-md w-full text-[#212337] text-lg"
-        />
+        <div className="relative">
+          <Input
+            id="password"
+            type={showPassword ? "text" : "password"}
+            placeholder="Enter your password"
+            {...register("password", {
+              required: "Password is required",
+              minLength: { value: 8, message: "Password must be at least 8 characters" },
+            })}
+            className="border border-gray-300 p-2 rounded-md w-full text-[#212337] text-lg"
+          />
+          <button
+            type="button"
+            onClick={togglePasswordVisibility}
+            className="absolute right-3 top-2 text-gray-600"
+          >
+            {showPassword ? "🙈" : "👁️"}
+          </button>
+        </div>
         {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
       </div>
 
+      {/* Remember Me & Forgot Password */}
       <div className="flex justify-between text-sm text-gray-600">
         <label className="flex items-center gap-2">
           <input type="checkbox" className="accent-blue-500" /> Remember me
@@ -82,6 +111,7 @@ export function SignUpForm() {
         <button className="text-blue-500 hover:underline">Forgot Password?</button>
       </div>
 
+      {/* Submit Button */}
       <div className="mt-4">
         <Button
           type="submit"
@@ -92,7 +122,7 @@ export function SignUpForm() {
         </Button>
       </div>
 
-      {error && <p className="text-red-500 text-sm">Signup failed. Please try again.</p>}
+      {error && <p className="text-red-500 text-sm">{error?.data?.message || "Signup failed. Please try again."}</p>}
 
       <div className="mt-4 text-center text-gray-500">or continue with</div>
       <SocialLogin />
