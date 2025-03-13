@@ -8,18 +8,22 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import SocialLogin from "./SocialLogin";
 import { useSignupMutation } from "@/redux/api/auth/authApi";
+import { useDispatch } from "react-redux"; // Import dispatch
+import { setUser } from "@/redux/feature/authSlices/authSlices";
 
-export function SignUpForm() {
+
+export function SignUpForm({ switchToLogin }) {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const [singup, { isLoading, error }] = useSignupMutation();
+  const [signup, { isLoading, error }] = useSignupMutation();
+
+  const dispatch = useDispatch(); // Initialize dispatch
 
   const [showPassword, setShowPassword] = useState(false);
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
-
   const onSubmit = async (data) => {
     const formattedData = {
       fullName: data.fullName,
@@ -28,10 +32,23 @@ export function SignUpForm() {
     };
 
     try {
-   
-      const res = await singup(formattedData).unwrap();
+      const res = await signup(formattedData).unwrap();
       console.log("Registration successful!", res);
       toast.success("User registered successfully");
+
+      if (res.success && res.data) {
+        // Dispatch user info to Redux store
+        dispatch(setUser({ user: res.data.fullName, token: res.data.token || "generated_token_here" }));
+
+        // Store user and token in localStorage
+        if (typeof window !== "undefined") {
+          localStorage.setItem("user", res.data.fullName);
+          localStorage.setItem("token", res.data.token || "generated_token_here");
+        }
+
+        // Switch to the login form
+        switchToLogin();
+      }
     } catch (err) {
       console.error("Registration failed:", err);
       toast.error(err?.data?.message || "Signup failed. Please try again.");
@@ -40,7 +57,6 @@ export function SignUpForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      {/* Full Name */}
       <div>
         <Label htmlFor="fullName" className="text-[#212337] text-lg">
           Name
@@ -55,7 +71,6 @@ export function SignUpForm() {
         {errors.fullName && <p className="text-red-500 text-sm">{errors.fullName.message}</p>}
       </div>
 
-      {/* Email */}
       <div>
         <Label htmlFor="email" className="text-[#212337] text-lg">
           Email
@@ -76,7 +91,6 @@ export function SignUpForm() {
         {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
       </div>
 
-      {/* Password */}
       <div>
         <Label htmlFor="password" className="text-[#212337] text-lg">
           Password
@@ -103,7 +117,6 @@ export function SignUpForm() {
         {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
       </div>
 
-      {/* Remember Me & Forgot Password */}
       <div className="flex justify-between text-sm text-gray-600">
         <label className="flex items-center gap-2">
           <input type="checkbox" className="accent-blue-500" /> Remember me
@@ -111,7 +124,6 @@ export function SignUpForm() {
         <button className="text-blue-500 hover:underline">Forgot Password?</button>
       </div>
 
-      {/* Submit Button */}
       <div className="mt-4">
         <Button
           type="submit"

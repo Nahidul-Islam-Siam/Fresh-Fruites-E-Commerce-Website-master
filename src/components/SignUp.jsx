@@ -1,91 +1,74 @@
 "use client";
 
-import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { FcGoogle } from "react-icons/fc";
-import { FaFacebook } from "react-icons/fa";
+import { useSignupMutation } from "@/redux/api/auth/authApi"; // Adjust import
+import { toast } from "react-toastify";
 
-export function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+export function SignUpForm({ switchToLogin }) {
+  const { register, handleSubmit, formState: { errors } } = useForm();
+  const [signup, { isLoading }] = useSignupMutation();
+
+  const onSubmit = async (data) => {
+    try {
+      const response = await signup(data).unwrap();
+      console.log("Registration successful:", response);
+      toast.success("Registration successful! Please log in.");
+
+      // Switch to login form after successful signup
+      switchToLogin();
+      
+    } catch (err) {
+      console.error("Registration failed:", err);
+      toast.error(err?.data?.message || "Registration failed. Try again.");
+    }
+  };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <button className="bg-gray-200 border border-gray-300 hover:bg-gray-300 text-black px-4 py-2 rounded-md text-sm font-medium">
-          Sign In
-        </button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[400px] p-6 bg-white shadow-lg rounded-lg">
-        <DialogHeader>
-          <DialogTitle className="text-center text-3xl font-semibold text-[#212337]">Register</DialogTitle>
-        </DialogHeader>
-        <div className="space-y-4">
-        <div>
-            <Label htmlFor="name" className="text-[#212337] text-lg">Email</Label>
-            <Input
-              id="name"
-              type="name"
-              placeholder="Enter your name"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-                           className="border border-gray-300 p-2 rounded-md w-full text-[#212337] text-lg"
-            />
-          </div>
-          <div>
-            <Label htmlFor="email" className="text-[#212337] text-lg">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-                           className="border border-gray-300 p-2 rounded-md w-full text-[#212337] text-lg"
-            />
-          </div>
-          <div>
-            <Label htmlFor="password" className="text-[#212337] text-lg">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="border border-gray-300 p-2 rounded-md w-full text-[#212337] text-lg"
-            />
-          </div>
-          <div className="flex justify-between text-sm text-gray-600">
-            <label className="flex items-center gap-2">
-              <input type="checkbox" className="accent-blue-500" /> Remember me
-            </label>
-            <button className="text-blue-500 hover:underline">Forgot Password?</button>
-          </div>
-        </div>
-        <div className="mt-4">
-          <Button className="w-full bg-[#FF6A1A] text-white py-2 rounded-md hover:bg-blue-700">Login</Button>
-        </div>
-        <div className="mt-4 text-center text-gray-500">or continue with</div>
-        <div className="flex gap-4 mt-2 justify-center">
-          <button className="flex items-center gap-2 border  text-lg border-gray-300 p-2 text-[#212337] font-semibold rounded-md w-full justify-center hover:bg-gray-100">
-            <FcGoogle className="text-2xl" /> Google
-          </button>
-          <button className="flex items-center gap-2 border border-gray-300 p-2 rounded-md w-full text-[#212337] text-lg font-semibold justify-center hover:bg-gray-100">
-            <FaFacebook className="text-blue-600 text-2xl" /> Facebook
-          </button>
-        </div>
-        <div className="mt-4 text-center text-sm text-[#212337]">
-          Don't have an account? <button className="text-[#FF6A1A] hover:underline">Sign Up</button>
-        </div>
-      </DialogContent>
-    </Dialog>
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <div>
+        <Label htmlFor="name" className="text-[#212337] text-lg">Name</Label>
+        <Input
+          id="name"
+          type="text"
+          placeholder="Enter your name"
+          {...register("name", { required: "Name is required" })}
+          className="border border-gray-300 p-2 rounded-md w-full text-lg"
+        />
+        {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
+      </div>
+
+      <div>
+        <Label htmlFor="email" className="text-[#212337] text-lg">Email</Label>
+        <Input
+          id="email"
+          type="email"
+          placeholder="Enter your email"
+          {...register("email", { required: "Email is required" })}
+          className="border border-gray-300 p-2 rounded-md w-full text-lg"
+        />
+        {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+      </div>
+
+      <div>
+        <Label htmlFor="password" className="text-[#212337] text-lg">Password</Label>
+        <Input
+          id="password"
+          type="password"
+          placeholder="Enter your password"
+          {...register("password", { required: "Password is required", minLength: 6 })}
+          className="border border-gray-300 p-2 rounded-md w-full text-lg"
+        />
+        {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+      </div>
+
+      <div className="mt-4">
+        <Button type="submit" className="w-full bg-[#FF6A1A] text-white py-2 rounded-md hover:bg-orange-600" disabled={isLoading}>
+          {isLoading ? "Registering..." : "Sign Up"}
+        </Button>
+      </div>
+    </form>
   );
 }

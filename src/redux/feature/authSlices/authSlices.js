@@ -1,7 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const safeParse = (value) => {
+    try {
+        return value ? JSON.parse(value) : null;
+    } catch (error) {
+        console.error("Error parsing JSON from localStorage:", error);
+        return null;
+    }
+};
+
 const initialState = {
-    user: typeof window !== "undefined" ? JSON.parse(localStorage.getItem("user")) || null : null,
+    user: typeof window !== "undefined" ? safeParse(localStorage.getItem("user")) : null,
     token: typeof window !== "undefined" ? localStorage.getItem("token") || null : null,
 };
 
@@ -12,7 +21,7 @@ const authSlice = createSlice({
         setUser: (state, action) => {
             const { user, token } = action.payload;
 
-            localStorage.setItem("user", JSON.stringify(user)); 
+            localStorage.setItem("user", user); 
             localStorage.setItem("token", token);
 
             state.user = user;
@@ -31,6 +40,6 @@ const authSlice = createSlice({
 export const { setUser, logOut } = authSlice.actions;
 export default authSlice.reducer;
 
-
-export const useCurrentToken = (state) => state.auth.token;
+// Renamed selector functions for clarity
+export const selectCurrentToken = (state) => state.auth.token;
 export const selectCurrentUser = (state) => state.auth.user;
