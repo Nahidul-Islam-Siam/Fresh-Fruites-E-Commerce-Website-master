@@ -10,26 +10,47 @@ const safeParse = (value) => {
 };
 
 const initialState = {
-    user: typeof window !== "undefined" ? safeParse(localStorage.getItem("user")) : null,
-    token: typeof window !== "undefined" ? localStorage.getItem("token") || null : null,
+    user: null,
+    token: null,
 };
+
+if (typeof window !== "undefined") {
+    const storedUser = localStorage.getItem("user");
+    const storedToken = localStorage.getItem("token");
+
+    initialState.user = storedUser ? safeParse(storedUser) : null;
+    initialState.token = storedToken || null;
+}
 
 const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
+   
         setUser: (state, action) => {
             const { user, token } = action.payload;
 
-            localStorage.setItem("user", JSON.stringify(user)); 
-            localStorage.setItem("token", token);
+            if (typeof window !== "undefined") {
+                if (user) {
+                    localStorage.setItem("user", JSON.stringify(user));
+                }
+                if (token) {
+                    localStorage.setItem("token", token);
+                }
+            }
 
+        
             state.user = user;
             state.token = token;
         },
+ 
         logOut: (state) => {
-            localStorage.removeItem("user");
-            localStorage.removeItem("token");
+       
+            if (typeof window !== "undefined") {
+                localStorage.removeItem("user");
+                localStorage.removeItem("token");
+            }
+
 
             state.user = null;
             state.token = null;

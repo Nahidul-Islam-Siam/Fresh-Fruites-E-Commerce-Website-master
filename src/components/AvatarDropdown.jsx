@@ -8,15 +8,32 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { logOut } from "@/redux/feature/authSlices/authSlices";
+
 import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 
 
 export function Avatar() {
   const router = useRouter();
-
+  const dispatch = useDispatch();
   const handleNavigate = (path) => {
-    // Navigate to the desired path
+  
     router.push(path);
+  };
+
+  const handleLogout = () => {
+  
+    dispatch(logOut());
+
+ 
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+    }
+
+    
+ 
   };
 
   return (
@@ -43,7 +60,7 @@ export function Avatar() {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem onClick={() => handleNavigate("/logout")}>
+        <DropdownMenuItem onClick={handleLogout}>
             Log out
           </DropdownMenuItem>
         </DropdownMenuGroup>

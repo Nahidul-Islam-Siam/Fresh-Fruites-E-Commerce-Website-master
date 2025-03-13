@@ -21,6 +21,16 @@ const authApi = baseApi.injectEndpoints({
         }),
     }),
 
+    getProfile: build.query({
+      query: (token) => ({
+        url: "api/v1/auth/profile",
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`, 
+        },
+      }),
+    }),
+
     getCategories: build.query({
       query: () => ({
         url: "api/v1/category",  
@@ -35,7 +45,12 @@ const authApi = baseApi.injectEndpoints({
       }),
     }),
 
-
+    getAllUser: build.query({
+      query: () => ({
+        url: "api/v1/users",  
+        method: "GET",
+      }),
+    }),
 
   }),
 });
@@ -45,6 +60,8 @@ export const {
   useLoginMutation, 
 useGetCategoriesQuery, 
 useGetProductsQuery,
+useGetProfileQuery,
+useGetAllUserQuery,
 } = authApi;
 
 export default authApi;

@@ -34,16 +34,18 @@ export function LoginForm({ closeModal }) {
       toast.success("Login successful!");
 
       if (response.success && response.data.token) {
-        dispatch(setUser({ user: response.data.user, token: response.data.token }));
+        dispatch(setUser({ token: response.data.token }));
 
         if (rememberMe) {
           localStorage.setItem("token", response.data.token);
-          localStorage.setItem("user", JSON.stringify(response.data.user)); 
+       
           
           
           closeModal();
           router.refresh(); 
         }
+        closeModal();
+        router.refresh();
       }
     } catch (err) {
       console.error("Login failed:", err);

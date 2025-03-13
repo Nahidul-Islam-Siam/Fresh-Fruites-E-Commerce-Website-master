@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import SocialLogin from "./SocialLogin";
 import { useSignupMutation } from "@/redux/api/auth/authApi";
-import { useDispatch } from "react-redux"; // Import dispatch
+import { useDispatch } from "react-redux"; 
 import { setUser } from "@/redux/feature/authSlices/authSlices";
 
 
@@ -20,7 +20,7 @@ export function SignUpForm({ switchToLogin }) {
   } = useForm();
   const [signup, { isLoading, error }] = useSignupMutation();
 
-  const dispatch = useDispatch(); // Initialize dispatch
+  const dispatch = useDispatch(); 
 
   const [showPassword, setShowPassword] = useState(false);
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
@@ -37,16 +37,20 @@ export function SignUpForm({ switchToLogin }) {
       toast.success("User registered successfully");
 
       if (res.success && res.data) {
-        // Dispatch user info to Redux store
-        dispatch(setUser({ user: res.data.fullName || "generated_token_here" }));
+ 
+        const user = res.data; 
+        const token = user.token; 
+  
 
-        // Store user and token in localStorage
+        dispatch(setUser({ user, token }));
+
+   
         if (typeof window !== "undefined") {
           localStorage.setItem("user", JSON.stringify({ user: res.data }));
         
         }
 
-        // Switch to the login form
+     
         switchToLogin();
       }
     } catch (err) {

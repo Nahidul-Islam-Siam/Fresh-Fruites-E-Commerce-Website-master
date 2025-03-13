@@ -1,5 +1,4 @@
-'use client';
-
+'use client'
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -10,23 +9,16 @@ import { Button } from './ui/button';
 import { AuthModal } from './AuthModal';
 import { Avatar } from './AvatarDropdown';
 
-
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [user, setUser] = useState(null);
   const router = useRouter(); 
+
+  // Use Redux to get the current user
+  const user = useSelector((state) => state.auth.user);
   
-  useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    setUser(storedUser); 
-  }, []);
- 
   const cartItems = useSelector((state) => state.cart.cartItems);
 
-
-  
   const totalItems = cartItems.reduce((acc, item) => acc + item.quantity, 0);
-
 
   const isActive = (path) => router.pathname === path ? 'text-gray-900 border-b-2 border-gray-900' : 'text-gray-600 hover:text-gray-900';
 
@@ -34,7 +26,6 @@ const Navbar = () => {
     <nav className="bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-     
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <Link href="/">
@@ -50,7 +41,6 @@ const Navbar = () => {
             </div>
           </div>
 
-   
           <div className="hidden md:flex flex-grow justify-center space-x-6">
             <Link href="/" passHref>
               <span className={`px-3 py-2 rounded-md text-sm text-[#4A4A52]  font-medium ${isActive('/')}`}>
@@ -74,19 +64,16 @@ const Navbar = () => {
             </Link>
           </div>
 
-         
           <div className="hidden md:flex items-center space-x-6">
             <button className="flex items-center text-gray-600 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
               <span className="mr-2 text-sm font-medium">Favorite</span>
               <FaHeart className="h-6 w-6" />
             </button>
 
-     
             <Link href="/cart" passHref>
               <button className="flex items-center text-gray-600 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white relative">
                 <span className="mr-2 text-sm font-medium">Cart</span>
                 <FaShoppingCart className="h-6 w-6" />
-             
                 {totalItems > 0 && (
                   <span className="absolute top-0 right-0 text-xs bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center">
                     {totalItems}
@@ -94,10 +81,11 @@ const Navbar = () => {
                 )}
               </button>
             </Link>
-            {user ? <Avatar /> : <AuthModal />} 
+
+            {/* Conditionally render the Avatar or AuthModal */}
+            {user ? <Avatar /> : <AuthModal />}
           </div>
 
-        
           <div className="-mr-2 flex md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
@@ -121,7 +109,7 @@ const Navbar = () => {
         </div>
       </div>
 
-
+      {/* Mobile Menu */}
       <div className={`${isOpen ? 'block' : 'hidden'} md:hidden`} id="mobile-menu">
         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
           <Link href="/">
@@ -144,7 +132,6 @@ const Navbar = () => {
               Blog
             </span>
           </Link>
-
 
           <div className="flex justify-around mt-4">
             <button className="text-gray-600 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
