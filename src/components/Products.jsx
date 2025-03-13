@@ -70,10 +70,13 @@ const ProductGrid = () => {
   const categoryNames = ["All", ...categories.map((category) => category.categoryName)];
 
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-white min-h-screen py-24">
       <div className="container mx-auto py-8">
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold mb-2">Our Fresh Products</h2>
+ <div className="mb-3">
+ <span className='text-sm md:text-xl mb-5 font-medium text-[#749B3F] bg-[#749B3F1A] py-1.5 px-3 rounded-md'>Our Products</span>
+ </div>
+          <h2 className="text-5xl text-[#212337] font-bold mb-2">Our Fresh Products</h2>
           <p className="text-gray-600">
             We pride ourselves on offering a wide variety of fresh and flavorful fruits, vegetables, and salad ingredients.
           </p>
