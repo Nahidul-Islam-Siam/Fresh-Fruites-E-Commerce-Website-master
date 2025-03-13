@@ -38,12 +38,12 @@ export function SignUpForm({ switchToLogin }) {
 
       if (res.success && res.data) {
         // Dispatch user info to Redux store
-        dispatch(setUser({ user: res.data.fullName, token: res.data.token || "generated_token_here" }));
+        dispatch(setUser({ user: res.data.fullName || "generated_token_here" }));
 
         // Store user and token in localStorage
         if (typeof window !== "undefined") {
-          localStorage.setItem("user", res.data.fullName);
-          localStorage.setItem("token", res.data.token || "generated_token_here");
+          localStorage.setItem("user", JSON.stringify({ user: res.data }));
+        
         }
 
         // Switch to the login form

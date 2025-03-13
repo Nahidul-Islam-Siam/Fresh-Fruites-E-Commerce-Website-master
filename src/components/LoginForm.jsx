@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -32,22 +34,16 @@ export function LoginForm({ closeModal }) {
       toast.success("Login successful!");
 
       if (response.success && response.data.token) {
-        const token = response.data.token;
-
-        const user = await fetchUserDetails(token);
-
-        dispatch(setUser({ user, token }));
-
+        dispatch(setUser({ user: response.data.user, token: response.data.token }));
 
         if (rememberMe) {
-          localStorage.setItem("token", token);
-          localStorage.setItem("user", JSON.stringify(user));
+          localStorage.setItem("token", response.data.token);
+          localStorage.setItem("user", JSON.stringify(response.data.user)); 
+          
+          
+          closeModal();
+          router.refresh(); 
         }
-
-        closeModal();
-
-   
-        router.refresh(); 
       }
     } catch (err) {
       console.error("Login failed:", err);
@@ -55,22 +51,9 @@ export function LoginForm({ closeModal }) {
     }
   };
 
-
-  const fetchUserDetails = async (token) => {
-    const response = await fetch("/api/user", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    const data = await response.json();
-    return data.user;
-  };
-
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-   
+      {/* Email Field */}
       <div>
         <Label htmlFor="email" className="text-[#212337] text-lg">Email</Label>
         <Input
@@ -89,7 +72,7 @@ export function LoginForm({ closeModal }) {
         {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
       </div>
 
-
+      {/* Password Field */}
       <div>
         <Label htmlFor="password" className="text-[#212337] text-lg">Password</Label>
         <div className="relative">
@@ -111,7 +94,7 @@ export function LoginForm({ closeModal }) {
         {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
       </div>
 
-    
+      {/* Remember Me & Forgot Password */}
       <div className="flex justify-between text-sm text-gray-600">
         <label className="flex items-center gap-2">
           <input
@@ -125,7 +108,7 @@ export function LoginForm({ closeModal }) {
         <button className="text-blue-500 hover:underline">Forgot Password?</button>
       </div>
 
- 
+      {/* Submit Button */}
       <div className="mt-4">
         <Button
           type="submit"
@@ -136,7 +119,7 @@ export function LoginForm({ closeModal }) {
         </Button>
       </div>
 
-   
+      {/* Social Login */}
       <div className="mt-4 text-center text-gray-500">or continue with</div>
       <SocialLogin />
     </form>

@@ -16,7 +16,10 @@ const Navbar = () => {
   const [user, setUser] = useState(null);
   const router = useRouter(); 
   
-
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    setUser(storedUser); 
+  }, []);
  
   const cartItems = useSelector((state) => state.cart.cartItems);
 
@@ -26,16 +29,7 @@ const Navbar = () => {
 
 
   const isActive = (path) => router.pathname === path ? 'text-gray-900 border-b-2 border-gray-900' : 'text-gray-600 hover:text-gray-900';
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedUser = localStorage.getItem("user");
-      if (storedUser) {
-        setUser(storedUser); 
-        console.log( storedUser );
-        
-      }
-    }
-  }, []);
+
   return (
     <nav className="bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -100,11 +94,7 @@ const Navbar = () => {
                 )}
               </button>
             </Link>
-            {user ? (
-              <Avatar fullName={user.fullName} />  
-            ) : (
-              <AuthModal /> 
-            )}
+            {user ? <Avatar /> : <AuthModal />} 
           </div>
 
         
