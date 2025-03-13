@@ -2,9 +2,10 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import Link from 'next/link'; 
-import { FaHeart, FaShoppingCart } from 'react-icons/fa'; 
+import Link from 'next/link';
+import { FaHeart, FaShoppingCart } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
+import { useSelector } from 'react-redux'; // Import useSelector to access the Redux state
 import { Button } from './ui/button';
 import { AuthModal } from './AuthModal';
 // import { Login } from './Login';
@@ -12,6 +13,12 @@ import { AuthModal } from './AuthModal';
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter(); // Using useRouter to get the current path
+
+  // Access cart items from Redux store using useSelector
+  const cartItems = useSelector((state) => state.cart.cartItems);
+
+  // Calculate total number of items in the cart
+  const totalItems = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
   // Function to determine if the current route matches the link
   const isActive = (path) => router.pathname === path ? 'text-gray-900 border-b-2 border-gray-900' : 'text-gray-600 hover:text-gray-900';
@@ -66,18 +73,22 @@ const Navbar = () => {
               <span className="mr-2 text-sm font-medium">Favorite</span>
               <FaHeart className="h-6 w-6" />
             </button>
-            <button className="flex items-center text-gray-600 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-              <span className="mr-2 text-sm font-medium">Cart</span>
-              <FaShoppingCart className="h-6 w-6" />
-            </button>
-           
-              {/* <button className="bg-none border-1 hover:bg-green-600 text-black px-3 py-2 rounded-md text-sm font-medium">
-                Sign In
-              </button> */}
-              {/* <Login/> */}
-              {/* <Button>Sign In </Button> */}
-              <AuthModal/>
-         
+
+            {/* Cart Button with item count */}
+            <Link href="/cart" passHref>
+              <button className="flex items-center text-gray-600 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white relative">
+                <span className="mr-2 text-sm font-medium">Cart</span>
+                <FaShoppingCart className="h-6 w-6" />
+                {/* Cart Item Count Badge */}
+                {totalItems > 0 && (
+                  <span className="absolute top-0 right-0 text-xs bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center">
+                    {totalItems}
+                  </span>
+                )}
+              </button>
+            </Link>
+
+            <AuthModal />
           </div>
 
           {/* Mobile Menu Toggle */}

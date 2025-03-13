@@ -8,6 +8,8 @@ import { Label } from "@/components/ui/label";
 import SocialLogin from "./SocialLogin";
 import { useLoginMutation } from "@/redux/api/auth/authApi";
 import { toast } from "react-toastify"; 
+import { useDispatch } from "react-redux";
+import { setUser } from "@/redux/feature/authSlices/authSlices";
 
 export function LoginForm() {
   const {
@@ -15,6 +17,7 @@ export function LoginForm() {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const dispatch = useDispatch();
 
   const [login, { isLoading, error }] = useLoginMutation();
   const [showPassword, setShowPassword] = useState(false);
@@ -23,23 +26,31 @@ export function LoginForm() {
     setShowPassword(!showPassword);
   };
 
+
   const onSubmit = async (data) => {
     const loginData = {
       email: data.email,
       password: data.password,
     };
-
+  
     try {
       const response = await login(loginData).unwrap();  
       console.log("Login successful:", response);
       toast.success("Login successful!");
-
+  
+      if (response.success && response.data.token) {
+     
+        dispatch(setUser({ user: response.data.user, token: response.data.token }));
+  
+        
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("user", JSON.stringify(response.data.user));  
+      }
     } catch (err) {
       console.error("Login failed:", err);
       toast.error(err?.data?.message || "Login failed. Please try again.");
     }
   };
-
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div>

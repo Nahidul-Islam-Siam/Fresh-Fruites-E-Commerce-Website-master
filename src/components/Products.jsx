@@ -3,23 +3,9 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useGetCategoriesQuery, useGetProductsQuery } from "@/redux/api/auth/authApi";
+import ProductCard from "./common/productCard";
 
-const ProductCard = ({ name, price, image }) => {
-  return (
-    <div className="bg-white rounded-lg shadow overflow-hidden group transition-all duration-300 hover:shadow-lg">
-      <div className="relative w-full h-48">
-        <Image src={image} alt={name} height={200} width={200} />
-      </div>
-      <div className="p-4 text-center">
-        <h3 className="text-lg text-[#212337] font-semibold mb-2">{name}</h3>
-        <p className="text-gray-600 mb-4">{price}</p>
-        <button className="w-full py-2 bg-orange-500 text-white rounded transition-all transform group-hover:scale-105 group-hover:bg-orange-600 duration-300">
-          Add to cart
-        </button>
-      </div>
-    </div>
-  );
-};
+
 
 const CategoryFilter = ({ selectedCategory, onSelectCategory, categories }) => {
   return (
@@ -103,7 +89,8 @@ const ProductGrid = () => {
           {Array.isArray(displayedProducts) && displayedProducts.length > 0 ? (
             displayedProducts.map((product) => (
               <ProductCard
-                key={product.id}
+              key={product.id}
+              id={product.id}
                 name={product.productName}
                 price={`${product.price}/kg`}
                 image={`${product.images[0]}`}
