@@ -51,8 +51,8 @@ export function Avatar() {
           <DropdownMenuItem onClick={() => handleNavigate("/dashboard")}>
             Dashboard
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => handleNavigate("/update-user")}>
-            Update User Info
+          <DropdownMenuItem onClick={() => handleNavigate("/add-product")}>
+           Add Product
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => handleNavigate("/change-password")}>
             Change Password

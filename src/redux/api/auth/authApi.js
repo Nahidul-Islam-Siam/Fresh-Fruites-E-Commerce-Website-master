@@ -52,6 +52,44 @@ const authApi = baseApi.injectEndpoints({
       }),
     }),
 
+    deleteProduct: build.mutation({
+      query: (id) => ({
+        url: `api/v1/products/${id}`, 
+        method: "DELETE",  
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }),
+      invalidatesTags: [{ type: 'Products', id: 'LIST' }],
+    }),
+
+    deleteCategory: build.mutation({
+      query: (id) => ({
+        url: `api/v1/category/${id}`, 
+        method: "DELETE",  
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`, 
+        },
+      }),
+      invalidatesTags: [{ type: 'Categories', id: 'LIST' }],
+    }),
+
+    addProduct: build.mutation({
+      query: (productData) => ({
+        url: "api/v1/products",
+        method: "POST",
+        body: productData,
+        headers: {
+          "Content-Type": "application/json",
+          
+        },
+        credentials: "include", 
+      }),
+    }),
+
+
+    
+
   }),
 });
 
@@ -62,6 +100,9 @@ useGetCategoriesQuery,
 useGetProductsQuery,
 useGetProfileQuery,
 useGetAllUserQuery,
+useDeleteProductMutation,
+useDeleteCategoryMutation,
+useAddProductMutation,
 } = authApi;
 
 export default authApi;
