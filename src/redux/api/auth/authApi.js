@@ -83,7 +83,7 @@ const authApi = baseApi.injectEndpoints({
           "Content-Type": "application/json",
           
         },
-        credentials: "include", 
+        credentials: true, 
       }),
     }),
 
