@@ -88,6 +88,13 @@ const authApi = baseApi.injectEndpoints({
     }),
 
 
+    getProductById: build.query({
+      query: (id) => ({
+        url: `api/v1/products/${id}`,
+        method: "GET",
+      }),
+    }),
+
     
 
   }),
@@ -103,6 +110,7 @@ useGetAllUserQuery,
 useDeleteProductMutation,
 useDeleteCategoryMutation,
 useAddProductMutation,
+useGetProductByIdQuery,
 } = authApi;
 
 export default authApi;

@@ -89,7 +89,7 @@ const TestimonialSection = () => {
           </div>
         </SwiperSlide>
 
-        {/* SwiperSlide - Testimonial 3 */}
+   
         <SwiperSlide>
           <div className="mx-auto max-w-5xl gap-10 p-6 flex items-center space-x-8">
             <div className="flex-shrink-0">
