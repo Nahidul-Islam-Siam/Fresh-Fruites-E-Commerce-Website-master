@@ -23,7 +23,7 @@ const Navbar = () => {
   const isActive = (path) => router.pathname === path ? 'text-gray-900 border-b-2 border-gray-900' : 'text-gray-600 hover:text-gray-900';
 
   return (
-    <nav className="bg-white shadow-md">
+    <nav className="">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">

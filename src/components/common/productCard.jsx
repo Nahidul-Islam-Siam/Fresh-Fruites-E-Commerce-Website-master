@@ -2,6 +2,7 @@ import { useDispatch } from 'react-redux';
 
 import Image from 'next/image';
 import { addToCart } from '@/redux/feature/productSlices/cartSlices';
+import Link from 'next/link';
 
 const ProductCard = ({ id, name, price, image }) => {
   const dispatch = useDispatch();
@@ -17,7 +18,9 @@ const ProductCard = ({ id, name, price, image }) => {
   return (
     <div className="bg-white rounded-lg shadow overflow-hidden group transition-all duration-300 hover:shadow-lg">
       <div className="relative w-full h-48">
-        <Image src={image} alt={name} height={200} width={200} />
+    <Link href={`product-details/${id}`}>
+    <Image src={image} alt={name} height={200} width={200} />
+    </Link>
       </div>
       <div className="p-4 text-center">
         <h3 className="text-lg text-[#212337] font-semibold mb-2">{name}</h3>

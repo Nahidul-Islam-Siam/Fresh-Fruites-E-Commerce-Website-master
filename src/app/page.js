@@ -1,7 +1,9 @@
 import AboutUs from "@/components/About";
 import Banner from "@/components/Banner";
+import BlogSection from "@/components/Blog";
 import ProductGrid from "@/components/Products";
 import FruitBundleOffer from "@/components/SpecialOffer";
+import TestimonialSection from "@/components/Testimonials";
 
 
 export default function Home() {
@@ -11,6 +13,8 @@ export default function Home() {
       <ProductGrid/>
      <AboutUs/>
      <FruitBundleOffer/>
+     <TestimonialSection/>
+<BlogSection/>
 
     </div>
   );
