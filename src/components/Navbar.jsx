@@ -4,26 +4,62 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FaHeart, FaShoppingCart } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
-import { useSelector } from 'react-redux'; 
+import { useSelector } from 'react-redux';
+import { motion } from 'framer-motion';
 
 import { AuthModal } from './AuthModal';
 import { Avatar } from './AvatarDropdown';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter(); 
+  const [bgColor, setBgColor] = useState('');
+  const [prevScrollY, setPrevScrollY] = useState(0);
+  const [isVisible, setIsVisible] = useState(true);
 
-
+  const router = useRouter();
   const user = useSelector((state) => state.auth.user);
-  
   const cartItems = useSelector((state) => state.cart.cartItems);
-
   const totalItems = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
   const isActive = (path) => router.pathname === path ? 'text-gray-900 border-b-2 border-gray-900' : 'text-gray-600 hover:text-gray-900';
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      // Logic to show the navbar only when scrolling down (top to bottom)
+      if (currentScrollY === 0) {
+        setIsVisible(true); // Always show when at the top
+      } else if (currentScrollY > prevScrollY) {
+        setIsVisible(true); // Scrolling down (top to bottom)
+      } else if (currentScrollY < prevScrollY) {
+        setIsVisible(false); // Scrolling up (bottom to top)
+      }
+
+      setPrevScrollY(currentScrollY);
+
+      // Set background color based on scroll position
+      if (window.scrollY > 0) {
+        setBgColor('bg-white');
+      } else {
+        setBgColor('');
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [prevScrollY]);
+
   return (
-    <nav className="">
+    <motion.nav
+      className={`${bgColor} transition-all fixed w-full top-0 z-50`}
+      initial={{ opacity: 1 }}
+      animate={{ opacity: isVisible ? 1 : 0 }}
+      transition={{ duration: 0.3 }}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
@@ -43,7 +79,7 @@ const Navbar = () => {
 
           <div className="hidden md:flex flex-grow justify-center space-x-6">
             <Link href="/" passHref>
-              <span className={`px-3 py-2 rounded-md text-sm text-[#4A4A52]  font-medium ${isActive('/')}`}>
+              <span className={`px-3 py-2 rounded-md text-sm text-[#4A4A52] font-medium ${isActive('/')}`}>
                 Home
               </span>
             </Link>
@@ -53,12 +89,12 @@ const Navbar = () => {
               </span>
             </Link>
             <Link href="/about" passHref>
-              <span className={`px-3 py-2 rounded-md  text-[#4A4A52]  text-sm font-medium ${isActive('/about')}`}>
+              <span className={`px-3 py-2 rounded-md text-[#4A4A52] text-sm font-medium ${isActive('/about')}`}>
                 About
               </span>
             </Link>
             <Link href="/blog" passHref>
-              <span className={`px-3 py-2 rounded-md text-sm text-[#4A4A52]  font-medium ${isActive('/blog')}`}>
+              <span className={`px-3 py-2 rounded-md text-sm text-[#4A4A52] font-medium ${isActive('/blog')}`}>
                 Blog
               </span>
             </Link>
@@ -81,7 +117,6 @@ const Navbar = () => {
                 )}
               </button>
             </Link>
-
 
             {user ? <Avatar /> : <AuthModal />}
           </div>
@@ -108,7 +143,6 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-
 
       <div className={`${isOpen ? 'block' : 'hidden'} md:hidden`} id="mobile-menu">
         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
@@ -149,7 +183,7 @@ const Navbar = () => {
           </Link>
         </div>
       </div>
-    </nav>
+    </motion.nav>
   );
 };
 
