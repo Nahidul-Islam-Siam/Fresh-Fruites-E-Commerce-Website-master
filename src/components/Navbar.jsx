@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { FaHeart, FaShoppingCart } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux'; 
-import { Button } from './ui/button';
+
 import { AuthModal } from './AuthModal';
 import { Avatar } from './AvatarDropdown';
 
@@ -13,7 +13,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter(); 
 
-  // Use Redux to get the current user
+
   const user = useSelector((state) => state.auth.user);
   
   const cartItems = useSelector((state) => state.cart.cartItems);
@@ -82,7 +82,7 @@ const Navbar = () => {
               </button>
             </Link>
 
-            {/* Conditionally render the Avatar or AuthModal */}
+
             {user ? <Avatar /> : <AuthModal />}
           </div>
 
@@ -109,7 +109,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+
       <div className={`${isOpen ? 'block' : 'hidden'} md:hidden`} id="mobile-menu">
         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
           <Link href="/">

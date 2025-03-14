@@ -30,27 +30,19 @@ export function SignUpForm({ switchToLogin }) {
       email: data.email,
       password: data.password,
     };
-
+  
     try {
       const res = await signup(formattedData).unwrap();
-      console.log("Registration successful!", res);
       toast.success("User registered successfully");
-
+  
       if (res.success && res.data) {
- 
         const user = res.data; 
         const token = user.token; 
   
-
         dispatch(setUser({ user, token }));
+        localStorage.setItem("user", JSON.stringify({ user: res.data }));
+  
 
-   
-        if (typeof window !== "undefined") {
-          localStorage.setItem("user", JSON.stringify({ user: res.data }));
-        
-        }
-
-     
         switchToLogin();
       }
     } catch (err) {
@@ -58,7 +50,8 @@ export function SignUpForm({ switchToLogin }) {
       toast.error(err?.data?.message || "Signup failed. Please try again.");
     }
   };
-
+  
+  
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div>

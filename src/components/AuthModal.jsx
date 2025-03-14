@@ -1,15 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { LoginForm } from "./LoginForm";
 import { SignUpForm } from "./SignUpForm";
 import { FiX } from "react-icons/fi"; 
+import { useSelector } from "react-redux"; 
+import { selectCurrentUser } from "@/redux/feature/authSlices/authSlices"; 
 
 export function AuthModal() {
   const [isLogin, setIsLogin] = useState(true);
   const [open, setOpen] = useState(false); 
+  const user = useSelector(selectCurrentUser); // Get current user from Redux state
+
+  useEffect(() => {
+    if (!user) {
+      setOpen(true); // Open modal only if user is not logged in
+    }
+  }, [user]);
+
+  const handleSwitchToLogin = () => {
+    setIsLogin(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpen(false);
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -20,7 +37,6 @@ export function AuthModal() {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[400px] p-6 bg-white shadow-lg rounded-lg">
         <DialogHeader className="relative">
-   
           <DialogClose asChild>
             <button className="absolute top-2 right-2 text-gray-600 hover:text-gray-900">
               <FiX className="text-2xl" />
@@ -31,11 +47,10 @@ export function AuthModal() {
           </DialogTitle>
         </DialogHeader>
 
-       
         {isLogin ? (
-          <LoginForm closeModal={() => setOpen(false)} />
+          <LoginForm closeModal={handleCloseModal} />
         ) : (
-          <SignUpForm switchToLogin={() => setIsLogin(true)} />
+          <SignUpForm switchToLogin={handleSwitchToLogin} />
         )}
 
         <div className="mt-4 text-center text-sm text-[#212337]">
