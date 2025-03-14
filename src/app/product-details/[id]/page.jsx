@@ -2,14 +2,19 @@
 
 import React, { useState } from "react";
 import { FaHeart, FaStar, FaStarHalf, FaShoppingCart } from "react-icons/fa";
-import { useGetProductByIdQuery } from "@/redux/api/auth/authApi";
+import { useGetCategoriesQuery, useGetProductByIdQuery } from "@/redux/api/auth/authApi";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 
 const ProductDetail = () => {
   const { id } = useParams();
   const [quantity, setQuantity] = useState(1);
-
+  const { data: category, error: categoryError, isLoading: categoryLoading } = useGetCategoriesQuery();
+  console.log(category?.data[0]?.id);
+  // id is saved in the category.datas.index.id
+  //and  categoryName is save category?.data[0]?.categoryName
+  // to do is filter product.categoryId with categor to get category name from use getcategory
+  
   const { data: products, error, isLoading } = useGetProductByIdQuery(id);
 
   if (isLoading) return <p>Loading product details...</p>;
@@ -17,6 +22,9 @@ const ProductDetail = () => {
 
   const product = products?.data;
   if (!product) return <p>Product not found.</p>;
+
+
+  const categoryName = category?.data?.find(cat => cat.id === product.categoryId)?.categoryName || "Unknown";
 
   const renderStars = (rating) => {
     const stars = [];
@@ -43,7 +51,7 @@ const ProductDetail = () => {
   return (
     <div className="w-full bg-white min-h-screen py-8 px-6 lg:px-16">
       <div className="max-w-screen-xl mx-auto flex flex-col lg:flex-row gap-12">
-        <div>Product Details Page: {id}</div>
+    
 
     
         <div className="lg:w-1/2 w-full">
@@ -83,6 +91,11 @@ const ProductDetail = () => {
               Category ID: {product.categoryId}
             </span>
           </p>
+          <p className="mb-3">
+  <span className="text-sm md:text-xl font-medium text-[#749B3F] bg-[#749B3F1A] py-1.5 px-3 rounded-md">
+    {categoryLoading ? "Loading category..." : categoryError ? "Category not found" : categoryName}
+  </span>
+</p>
 
           <h1 className="text-5xl font-bold mb-4 text-[#212337]">{product.productName}</h1>
 
