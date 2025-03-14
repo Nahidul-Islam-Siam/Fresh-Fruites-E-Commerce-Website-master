@@ -1,36 +1,122 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Fresh Fruites E-Commerce Website
 
-## Getting Started
+## Project Overview
+Fresh Fruites is a modern e-commerce platform for selling fresh fruits online. Built using **Next.js**, this project includes a fully functional **dashboard**, **user authentication**, **product management**, and a **shopping cart**, all implemented using **Redux Toolkit Query (RTK Query)** and APIs.
 
-First, run the development server:
+### 🔗 Live Website: [Fresh Fruites E-Commerce](https://fresh-fruites-e-commerce-website-master.vercel.app/)
+### 📂 GitHub Repository: [Fresh Fruites E-Commerce](https://github.com/Nahidul-Islam-Siam/Fresh-Fruites-E-Commerce-Website-master.git)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Features
+✅ **User Authentication** (Signup/Login via API)  
+✅ **Dashboard** (Admin & User)  
+✅ **Product Management** (Add, Delete, View Products)  
+✅ **Category Management**  
+✅ **Shopping Cart with Redux Toolkit**  
+✅ **Real-Time Data Fetching using RTK Query**  
+✅ **Responsive UI with Tailwind CSS**  
+✅ **Toast Notifications for Better UX**  
+
+---
+## 🏗️ Tech Stack
+- **Next.js** (15.2.2) - Server-side rendering & fast frontend framework
+- **React 19** - Component-based UI
+- **Redux Toolkit & RTK Query** - State management & API calls
+- **Tailwind CSS** - Styling
+- **Framer Motion** - Animations
+- **Recharts** - Data visualization
+- **React Hook Form** - Form handling
+- **React Toastify** - Notifications
+- **Radix UI** - Accessible UI components
+
+---
+## 🚀 Installation & Setup
+
+### 1️⃣ Clone the Repository
+```sh
+git clone https://github.com/Nahidul-Islam-Siam/Fresh-Fruites-E-Commerce-Website-master.git
+cd Fresh-Fruites-E-Commerce-Website-master
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2️⃣ Install Dependencies
+```sh
+yarn install
+# or
+npm install
+```
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### 3️⃣ Start the Development Server
+```sh
+yarn dev
+# or
+npm run dev
+```
+The app will be running at `http://localhost:3000`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 4️⃣ Build for Production
+```sh
+yarn build
+# or
+npm run build
+```
 
-## Learn More
+---
+## 📌 API Endpoints & Redux Integration
 
-To learn more about Next.js, take a look at the following resources:
+### **Authentication**
+```javascript
+useSignupMutation();    // Register a new user
+useLoginMutation();     // User login
+useGetProfileQuery();   // Fetch user profile
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### **Products & Categories**
+```javascript
+useGetProductsQuery();     // Fetch all products
+useGetProductByIdQuery();  // Fetch a single product
+useAddProductMutation();   // Add a new product
+useDeleteProductMutation(); // Delete a product
+useGetCategoriesQuery();   // Fetch categories
+useDeleteCategoryMutation(); // Delete a category
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### **User Management**
+```javascript
+useGetAllUserQuery();  // Fetch all users
+```
 
-## Deploy on Vercel
+---
+## 🛠️ Project Structure
+```
+📂 fresh-fruites-ecommerce
+ ├── 📁 public/            # Static assets (images, icons, etc.)
+ ├── 📁 src/
+ │   ├── 📁 components/    # Reusable UI components
+ │   ├── 📁 pages/         # Next.js pages (home, dashboard, auth, etc.)
+ │   ├── 📁 store/        # Redux store & slices
+ │   ├── 📁 services/     # API services (RTK Query)
+ │   ├── 📁 styles/       # Global styles (Tailwind)
+ │   └── 📁 utils/        # Utility functions
+ ├── 📄 package.json       # Dependencies & scripts
+ ├── 📄 README.md          # Project documentation
+ └── 📄 next.config.js     # Next.js configuration
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
+## 📜 License
+This project is **open-source** and available under the [MIT License](LICENSE).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+## 🙌 Contributing
+We welcome contributions! If you'd like to improve this project:
+1. Fork the repository
+2. Create a new branch (`feature-branch`)
+3. Commit your changes
+4. Submit a pull request
+
+---
+## 📞 Contact
+For any questions, feel free to reach out!
+- **GitHub:** [Nahidul-Islam-Siam](https://github.com/Nahidul-Islam-Siam)
+- **Email:** siamnahidul093@gmail.com
+- **Phone:** 01772593924
+
