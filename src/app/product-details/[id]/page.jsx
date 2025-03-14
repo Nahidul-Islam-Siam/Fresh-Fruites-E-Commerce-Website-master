@@ -60,7 +60,7 @@ const ProductDetail = () => {
   };
 
   return (
-    <div className="w-full bg-white min-h-screen py-8 px-6 lg:px-16">
+    <div className="w-full bg-white min-h-screen py-8 pt-30 px-6 lg:px-16">
       <div className="max-w-screen-xl mx-auto flex flex-col lg:flex-row gap-12">
         <div className="lg:w-1/2 w-full">
           <div className="relative overflow-hidden rounded-lg">
@@ -127,6 +127,8 @@ const ProductDetail = () => {
     </div>
   ))
 ) : (
+
+  
   <p className="text-gray-500">No related products found.</p>
 )}
 

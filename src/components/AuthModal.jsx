@@ -12,11 +12,11 @@ import { selectCurrentUser } from "@/redux/feature/authSlices/authSlices";
 export function AuthModal() {
   const [isLogin, setIsLogin] = useState(true);
   const [open, setOpen] = useState(false); 
-  const user = useSelector(selectCurrentUser); // Get current user from Redux state
+  const user = useSelector(selectCurrentUser); 
 
   useEffect(() => {
     if (!user) {
-      setOpen(true); // Open modal only if user is not logged in
+      setOpen(true); 
     }
   }, [user]);
 
@@ -31,7 +31,7 @@ export function AuthModal() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button className="bg-gray-200 border border-gray-300 hover:bg-gray-300 text-black px-4 py-2 rounded-md text-sm font-medium">
+        <button className=" border border-gray-300 hover:bg-gray-300 text-white hover:text-black px-4 py-2 rounded-md text-sm font-medium">
           {isLogin ? "Sign In" : "Sign Up"}
         </button>
       </DialogTrigger>
