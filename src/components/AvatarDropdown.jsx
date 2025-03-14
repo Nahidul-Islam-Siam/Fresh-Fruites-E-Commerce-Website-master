@@ -39,7 +39,7 @@ export function Avatar() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-      <button className=" border border-gray-300 hover:bg-gray-300 text-white hover:text-black px-4 py-2 rounded-md text-sm font-medium">
+      <button className=" border border-gray-300 hover:bg-gray-300 text-black hover:text-black px-4 py-2 rounded-md text-sm font-medium">
            My Acoount
           </button>
       </DropdownMenuTrigger>

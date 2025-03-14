@@ -14,7 +14,9 @@ const AboutUs = () => {
                 <span className='text-sm md:text-xl font-medium text-[#749B3F] bg-[#749B3F1A] py-1.5 px-3 rounded-md'>About us</span>
                 <h2 className='text-3xl md:text-5xl font-bold text-[#212337] py-4 '>About Fresh Harvest</h2>
                 <p className="text-[#4A4A52]  leading-6 mb-8 md:pr-48">Welcome to Fresh Harvest, your premier destination for high-quality and fresh produce. We are passionate about providing you with the finest fruits, vegetables, and salad ingredients to nourish your body and delight your taste buds. With a commitment to excellence, sustainability, and customer satisfaction, Fresh Harvest is here to revolutionize your grocery shopping experience.</p>
-                <button className='py-4 px-8 text-lg font-medium rounded-md text-[#FF6A1A] border border-[#FF6A1A]'>Shop Now</button>
+                <button className="px-6 py-3 border-2 border-[#FF6A1A] text-[#FF6A1A] rounded-md hover:bg-orange-600 hover:text-white transition-all">
+Read More
+            </button>
             </div>
         </div>
     </div>

@@ -106,7 +106,7 @@ const ProductGrid = () => {
 
         <div className="flex justify-center mt-8">
           <Link href="/shop">
-            <button className="px-6 py-3 bg-orange-500 text-white rounded hover:bg-orange-600 transition-all">
+            <button className="px-6 py-3 border-2 border-[#FF6A1A] text-[#FF6A1A] rounded-md hover:bg-orange-600 hover:text-white transition-all">
               See All Products
             </button>
           </Link>
